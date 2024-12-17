@@ -4,16 +4,20 @@ WMS application for android scanners to work together with Dynamics GP
 
 import toga
 from toga.style import Pack
-from toga.style.pack import COLUMN, ROW, BOTTOM, CENTER
+from toga.style.pack import COLUMN, ROW, BOTTOM, CENTER, RIGHT
 from toga.constants import RED
 
 
 class WMSApp(toga.App):
     MENU_FONT_SIZE = 20
     DEF_PADDING = 5
+    TOP_MENU_PADDING = (30, DEF_PADDING, DEF_PADDING, DEF_PADDING)
+    LABEL_PADDING = (DEF_PADDING, 1, DEF_PADDING, DEF_PADDING)
+    ENTRY_PADDING = (DEF_PADDING, DEF_PADDING, DEF_PADDING, 1)
 
     def startup(self):
-        self.main_box = toga.Box(style=Pack(direction=COLUMN))
+        self.main_box = toga.Box(style=Pack(direction=COLUMN,
+                                            padding=self.TOP_MENU_PADDING))
         self.create_helpers()
         self.create_windows()
         self.add_main_menu()
@@ -28,8 +32,9 @@ class WMSApp(toga.App):
         self.create_putaway_window()
 
     def create_receiving_window(self):
-        self.r_sku_label = toga.Label("SKU: ",
-                                      style=Pack(padding=self.DEF_PADDING))
+        self.r_sku_label = toga.Label("SKU:",
+                                      style=Pack(padding=self.LABEL_PADDING,
+                                                 alignment=RIGHT))
 
         self.r_sku_entry = toga.TextInput()
 
@@ -38,10 +43,10 @@ class WMSApp(toga.App):
                                                         padding=self.DEF_PADDING,
                                                         ))
 
-        self.sku_label_box = toga.Box(style=Pack(padding=self.DEF_PADDING),
+        self.sku_label_box = toga.Box(style=Pack(padding=self.LABEL_PADDING),
                                       children=[self.r_sku_label,])
 
-        self.sku_entry_box = toga.Box(style=Pack(padding=self.DEF_PADDING,
+        self.sku_entry_box = toga.Box(style=Pack(padding=self.ENTRY_PADDING,
                                                  direction=COLUMN,
                                                  flex=1),
                                       children=[self.r_sku_entry,])
@@ -60,16 +65,36 @@ class WMSApp(toga.App):
                                          children=[self.no_sku_found_label,
                                                    ])
 
-        self.r_outer_sku_box = toga.Box(style=Pack(padding=self.DEF_PADDING,
-                                                   direction=COLUMN,
+        self.r_outer_sku_box = toga.Box(style=Pack(direction=COLUMN,
                                                    alignment=CENTER,
                                                    ),
                                         children=[self.r_inner_sku_box,
                                                   ])
 
+        enter_box = toga.Box(style=Pack(direction=COLUMN,
+                                        flex=1),
+                             children=[self.enter_button,
+                                       ]
+                             )
+
+        back_box = toga.Box(style=Pack(direction=COLUMN,
+                                       flex=1),
+                            children=[self.back_button,
+                                      ]
+                            )
+
+        lower_menu_box = toga.Box(style=Pack(padding=self.DEF_PADDING,
+                                             direction=ROW),
+                                  children=[enter_box,
+                                            back_box,
+                                            ]
+                                  )
+
         self.receiving_box = toga.Box(style=Pack(padding=self.DEF_PADDING,
                                                  direction=COLUMN),
                                       children=[self.r_outer_sku_box,
+                                                self.spacer,
+                                                lower_menu_box,
                                                 ])
 
     def create_putaway_window(self):
@@ -137,18 +162,6 @@ class WMSApp(toga.App):
     def receiving(self, widget):
         self.r_sku_entry.value = ""
         self.__remove_no_sku_label()
-        self.receiving_box.add(self.spacer)
-        self.receiving_box.add(toga.Box(style=Pack(padding=self.DEF_PADDING,
-                                                   direction=ROW),
-                                        children=[toga.Box(style=Pack(direction=COLUMN,
-                                                                      flex=1),
-                                                           children=[self.enter_button,]),
-                                                  toga.Box(style=Pack(direction=COLUMN,
-                                                                      flex=1),
-                                                           children=[self.back_button,]),
-                                                  ]
-                                        )
-                               )
 
         self.main_window.content = self.receiving_box
 
@@ -165,12 +178,16 @@ class WMSApp(toga.App):
     def r_enter(self, widget):
         sku = self.r_sku_entry.value
         if sku == "111":
+            self.r_sku_entry.value = ""
             self.__remove_no_sku_label()
-            #self.receive_product(sku)
+            self.receive_product(sku)
         else:
             self.r_outer_sku_box.insert(1, self.no_sku_label_box)
 
     def receive_product(self, sku):
+        print(f"Received {sku}")
+
+    def __draw_receive_product_box(self):
         pass
 
     def back(self, widget):
