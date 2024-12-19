@@ -4,7 +4,7 @@ WMS application for android scanners to work together with Dynamics GP
 
 import toga
 from toga.style import Pack
-from toga.style.pack import COLUMN, CENTER, RIGHT, LEFT
+from toga.style.pack import COLUMN, CENTER, RIGHT
 from toga.constants import RED, WHITE
 
 
@@ -150,7 +150,7 @@ class Receive:
         self.lower_menu_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                        children=[self.save_button, self.back_button])
 
-        self.details_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, direction=COLUMN, background_color=WHITE),
+        self.details_box = toga.Box(style=self.root.DEF_DETAILS_OUTER_BOX_STYLE,
                                     children=[self.item_details_box,
                                               self.quantity_box,
                                               self.weight_box,
@@ -330,7 +330,7 @@ class Putaway:
         self.lower_menu_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                        children=[self.save_button, self.back_button])
 
-        self.details_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, direction=COLUMN, background_color=WHITE),
+        self.details_box = toga.Box(style=self.root.DEF_DETAILS_OUTER_BOX_STYLE,
                                     children=[self.tag_box,
                                               self.item_details_box,
                                               self.quantity_box,
@@ -344,21 +344,34 @@ class Putaway:
                                               ])
 
     def __clear_putaway_detail_window(self):
-        pass
+        self.tag_label.value = None
+        self.quantity_value_label.value = None
+        self.weight_value_label.value = None
+        self.best_before_value_label.value = None
+        self.batch_code_value_label.value = None
+        self.location_from_value_label.value = None
+        self.location_to_entry.value = None
 
     def enter_putaway_detail(self, widget):
+        tag = self.tag_entry.value
         self.__clear_putaway_detail_window()
-        if self.tag_entry.value == "222":                           # TODO: Change to query a database.
+        if tag == "222":                                            # TODO: Change to query a database.
+            self.tag_label.text = tag
+            self.quantity_value_label.text = "40"
+            self.weight_value_label.text = "1.640" + " KG"
+            self.best_before_value_label.text = "01/02/2025"
+            self.batch_code_value_label.text = "AB512"
+            self.location_from_value_label.text = "GOODSIN"
             self.location_to_entry.value = "A01"                    # TODO: Change to get a default location from SQL.
-            self.root.main_window.content = self.details_box
+            self.root.main_window.content = self.details_box        # TODO: Add sublocation (visibility is based on item type value)
         else:
-            pass
+            pass                                                    # TODO: Add "Tag not found" error
 
     def back_to_putaway_main(self, widget):
         self.enter_putaway_main(widget)
 
     def save_tag(self, widget):
-        pass
+        print(self.location_to_entry.value)                         # TODO: Add location checker.
 
 
 class WMSApp(toga.App):
@@ -374,11 +387,11 @@ class WMSApp(toga.App):
     DEF_ENTRY_STYLE = Pack(direction=COLUMN, flex=1)
     DEF_LABEL_STYLE = Pack(padding=LABEL_PADDING, font_family=DEF_LABEL_FONT, alignment=RIGHT,
                            width=75, background_color=WHITE)
-    DEF_LABEL_VALUE_STYLE = Pack(padding=LABEL_PADDING, font_family=DEF_LABEL_VALUE_FONT, alignment=LEFT,
-                                 flex=1, background_color=WHITE)
+    DEF_LABEL_VALUE_STYLE = Pack(padding=LABEL_PADDING, font_family=DEF_LABEL_VALUE_FONT, background_color=WHITE)
     DEF_MAIN_MENU_STYLE = Pack(padding=DEF_PADDING, font_size=MENU_FONT_SIZE, font_family=DEF_BUTTON_FONT)
     DEF_LOW_MENU_STYLE = Pack(padding=DEF_PADDING, font_size=MENU_FONT_SIZE, font_family=DEF_BUTTON_FONT, flex=1)
     DEF_DETAILS_BOX_STYLE = Pack(padding=DEF_PADDING, background_color=WHITE)
+    DEF_DETAILS_OUTER_BOX_STYLE = Pack(padding=DEF_PADDING, direction=COLUMN, background_color=WHITE)
     DEF_ERROR_STYLE = Pack(padding=DEF_PADDING, font_size=ERROR_FONT_SIZE, font_family=DEF_ERROR_FONT,
                            alignment=RIGHT, color=RED, background_color=WHITE)
     DEF_BG_STYLE = Pack(direction=COLUMN, padding=(10, DEF_PADDING, DEF_PADDING, DEF_PADDING), background_color=WHITE)
