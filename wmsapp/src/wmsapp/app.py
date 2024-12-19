@@ -88,27 +88,28 @@ class Receive:
         self.root.change_window("Receiving", self.main_box)
 
     def __create_receiving_detail_window(self):
+        # Widgets
         self.item_code_label = toga.Label("", style=Pack(padding=self.root.LABEL_PADDING))
 
         self.item_desc_label = toga.Label("", style=Pack(padding=self.root.LABEL_PADDING))
 
-        self.quantity_label = toga.Label("Quantity: ", style=self.root.DEF_LABEL_STYLE)
+        self.quantity_label = toga.Label("Quantity:", style=self.root.DEF_LABEL_STYLE)
 
         self.quantity_entry = toga.NumberInput(style=self.root.DEF_ENTRY_STYLE)
 
-        self.weight_label = toga.Label("Weight: ", style=self.root.DEF_LABEL_STYLE)
+        self.weight_label = toga.Label("Weight:", style=self.root.DEF_LABEL_STYLE)
 
         self.weight_entry = toga.NumberInput(style=self.root.DEF_ENTRY_STYLE, step=0.001)
 
-        self.best_before_label = toga.Label("Best Before: ", style=self.root.DEF_LABEL_STYLE)
+        self.best_before_label = toga.Label("Best Before:", style=self.root.DEF_LABEL_STYLE)
 
         self.best_before_entry = toga.DateInput(style=self.root.DEF_ENTRY_STYLE)
 
-        self.batch_code_label = toga.Label("Batch Code: ", style=self.root.DEF_LABEL_STYLE)
+        self.batch_code_label = toga.Label("Batch Code:", style=self.root.DEF_LABEL_STYLE)
 
         self.batch_code_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
 
-        self.tag_label = toga.Label("Tag: ", style=self.root.DEF_LABEL_STYLE)
+        self.tag_label = toga.Label("Tag:", style=self.root.DEF_LABEL_STYLE)
 
         self.tag_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
 
@@ -126,6 +127,7 @@ class Receive:
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
+        # Boxes
         self.item_details_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                          children=[self.item_code_label, self.item_desc_label])
 
@@ -266,21 +268,23 @@ class Putaway:
         self.root.change_window("Putaway", self.main_box)
 
     def __create_putaway_detail_window(self):
-        self.tag_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
+        # Widgets
+        self.tag_label = toga.Label("Tag:", style=self.root.DEF_LABEL_STYLE)
+        self.tag_value_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
         
         self.item_code_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
         self.item_desc_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
 
-        self.quantity_label = toga.Label("Quantity: ", style=self.root.DEF_LABEL_STYLE)
+        self.quantity_label = toga.Label("Quantity:", style=self.root.DEF_LABEL_STYLE)
         self.quantity_value_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
 
-        self.weight_label = toga.Label("Weight: ", style=self.root.DEF_LABEL_STYLE)
+        self.weight_label = toga.Label("Weight:", style=self.root.DEF_LABEL_STYLE)
         self.weight_value_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
 
-        self.best_before_label = toga.Label("Best Before: ", style=self.root.DEF_LABEL_STYLE)
+        self.best_before_label = toga.Label("Best Before:", style=self.root.DEF_LABEL_STYLE)
         self.best_before_value_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
 
-        self.batch_code_label = toga.Label("Batch Code: ", style=self.root.DEF_LABEL_STYLE)
+        self.batch_code_label = toga.Label("Batch Code:", style=self.root.DEF_LABEL_STYLE)
         self.batch_code_value_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
 
         self.location_from_label = toga.Label("From:", style=self.root.DEF_LABEL_STYLE)
@@ -300,8 +304,11 @@ class Putaway:
                                        style=self.root.DEF_LOW_MENU_STYLE,
                                        )
 
+        # Boxes
         self.tag_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
-                                children=[self.tag_label, ])
+                                children=[self.tag_label, self.tag_value_label])
+
+        self.tag_box2 = toga.Window()
 
         self.item_details_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                          children=[self.item_code_label, self.item_desc_label])
@@ -331,8 +338,8 @@ class Putaway:
                                        children=[self.save_button, self.back_button])
 
         self.details_box = toga.Box(style=self.root.DEF_DETAILS_OUTER_BOX_STYLE,
-                                    children=[self.tag_box,
-                                              self.item_details_box,
+                                    children=[self.item_details_box,
+                                              self.tag_box,
                                               self.quantity_box,
                                               self.weight_box,
                                               self.best_before_box,
@@ -344,19 +351,19 @@ class Putaway:
                                               ])
 
     def __clear_putaway_detail_window(self):
-        self.tag_label.value = None
-        self.quantity_value_label.value = None
-        self.weight_value_label.value = None
-        self.best_before_value_label.value = None
-        self.batch_code_value_label.value = None
-        self.location_from_value_label.value = None
-        self.location_to_entry.value = None
+        self.tag_value_label.text = None
+        self.quantity_value_label.text = None
+        self.weight_value_label.text = None
+        self.best_before_value_label.text = None
+        self.batch_code_value_label.text = None
+        self.location_from_value_label.text = None
+        self.location_to_entry.text = None
 
     def enter_putaway_detail(self, widget):
         tag = self.tag_entry.value
         self.__clear_putaway_detail_window()
         if tag == "222":                                            # TODO: Change to query a database.
-            self.tag_label.text = tag
+            self.tag_value_label.text = tag
             self.quantity_value_label.text = "40"
             self.weight_value_label.text = "1.640" + " KG"
             self.best_before_value_label.text = "01/02/2025"
@@ -372,6 +379,7 @@ class Putaway:
 
     def save_tag(self, widget):
         print(self.location_to_entry.value)                         # TODO: Add location checker.
+        self.enter_putaway_main(widget)
 
 
 class WMSApp(toga.App):
