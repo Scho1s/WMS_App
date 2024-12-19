@@ -11,36 +11,37 @@ from toga.constants import RED, WHITE
 class Receive:
     def __init__(self, root):
         self.root = root
+        self.__create_receiving_main_window()
+        self.__create_receiving_detail_window()
 
-    def create_receiving_main_window(self):
-        self.r_sku_label = toga.Label("SKU:",
-                                      style=self.root.DEF_LABEL_STYLE)
+    def __create_receiving_main_window(self):
+        self.sku_label = toga.Label("SKU:", style=self.root.DEF_LABEL_STYLE)
 
-        self.r_sku_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
+        self.sku_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
 
         self.no_sku_found_label = toga.Label("", style=self.root.DEF_ERROR_STYLE)
 
-        self.r_spacer = toga.Box(style=self.root.DEF_SPACER_STYLE)
+        self.spacer = toga.Box(style=self.root.DEF_SPACER_STYLE)
 
-        self.r_enter_button = toga.Button(
+        self.enter_button = toga.Button(
             "Enter",
             on_press=self.enter_receiving_detail,
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
-        self.r_back_button = toga.Button(
+        self.back_button = toga.Button(
             "Back",
             on_press=self.root.back_to_main,
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
-        self.r_sku_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
-                                             alignment=RIGHT,
-                                             background_color=WHITE,
-                                             flex=1),
-                                  children=[self.r_sku_label,
-                                            self.r_sku_entry,
-                                            ])
+        self.sku_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+                                           alignment=RIGHT,
+                                           background_color=WHITE,
+                                           flex=1),
+                                children=[self.sku_label,
+                                          self.sku_entry,
+                                          ])
 
         self.no_sku_label_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
                                                     alignment=RIGHT,
@@ -49,185 +50,181 @@ class Receive:
                                          children=[self.no_sku_found_label,
                                                    ])
 
-        self.r_outer_sku_box = toga.Box(style=Pack(direction=COLUMN,
-                                                   alignment=CENTER,
-                                                   background_color=WHITE,
-                                                   ),
-                                        children=[self.r_sku_box,
-                                                  self.no_sku_label_box,
-                                                  ])
+        self.outer_sku_box = toga.Box(style=Pack(direction=COLUMN,
+                                                 alignment=CENTER,
+                                                 background_color=WHITE,
+                                                 ),
+                                      children=[self.sku_box,
+                                                self.no_sku_label_box,
+                                                ])
 
-        self.r_spacer_box = toga.Box(style=Pack(direction=COLUMN,
-                                                background_color=WHITE,
-                                                flex=1),
-                                     children=[self.r_spacer,
-                                               ])
-
-        self.r_lower_menu_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
-                                                    background_color=WHITE,
-                                                    ),
-                                         children=[self.r_enter_button,
-                                                   self.r_back_button,
-                                                   ])
-
-        self.r_main_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+        self.spacer_box = toga.Box(style=Pack(direction=COLUMN,
                                               background_color=WHITE,
-                                              direction=COLUMN),
-                                   children=[self.r_outer_sku_box,
-                                             self.r_spacer_box,
-                                             self.r_lower_menu_box,
+                                              flex=1),
+                                   children=[self.spacer,
                                              ])
 
-    def create_receiving_detail_window(self):
-        self.r_item_code_label = toga.Label("",
-                                            style=Pack(padding=self.root.LABEL_PADDING))
+        self.lower_menu_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+                                                  background_color=WHITE,
+                                                  ),
+                                       children=[self.enter_button,
+                                                 self.back_button,
+                                                 ])
 
-        self.r_item_desc_label = toga.Label("",
-                                            style=Pack(padding=self.root.LABEL_PADDING))
+        self.main_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+                                            background_color=WHITE,
+                                            direction=COLUMN),
+                                 children=[self.outer_sku_box,
+                                           self.spacer_box,
+                                           self.lower_menu_box,
+                                           ])
 
-        self.r_quantity_label = toga.Label("Quantity: ",
-                                           style=self.root.DEF_LABEL_STYLE)
+    def __create_receiving_detail_window(self):
+        self.item_code_label = toga.Label("", style=Pack(padding=self.root.LABEL_PADDING))
 
-        self.r_quantity_entry = toga.NumberInput(style=self.root.DEF_ENTRY_STYLE)
+        self.item_desc_label = toga.Label("", style=Pack(padding=self.root.LABEL_PADDING))
 
-        self.r_weight_label = toga.Label("Weight: ",
-                                         style=self.root.DEF_LABEL_STYLE)
+        self.quantity_label = toga.Label("Quantity: ", style=self.root.DEF_LABEL_STYLE)
 
-        self.r_weight_entry = toga.NumberInput(style=self.root.DEF_ENTRY_STYLE, step=0.001)
+        self.quantity_entry = toga.NumberInput(style=self.root.DEF_ENTRY_STYLE)
 
-        self.r_best_before_label = toga.Label("Best Before: ",
-                                              style=self.root.DEF_LABEL_STYLE)
+        self.weight_label = toga.Label("Weight: ", style=self.root.DEF_LABEL_STYLE)
 
-        self.r_best_before_entry = toga.DateInput(style=self.root.DEF_ENTRY_STYLE)
+        self.weight_entry = toga.NumberInput(style=self.root.DEF_ENTRY_STYLE, step=0.001)
 
-        self.r_batch_code_label = toga.Label("Batch Code: ",
-                                             style=self.root.DEF_LABEL_STYLE)
+        self.best_before_label = toga.Label("Best Before: ", style=self.root.DEF_LABEL_STYLE)
 
-        self.r_batch_code_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
+        self.best_before_entry = toga.DateInput(style=self.root.DEF_ENTRY_STYLE)
 
-        self.r_tag_label = toga.Label("Tag: ",
-                                      style=self.root.DEF_LABEL_STYLE)
+        self.batch_code_label = toga.Label("Batch Code: ", style=self.root.DEF_LABEL_STYLE)
 
-        self.r_tag_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
+        self.batch_code_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
 
-        self.r_spacer2 = toga.Box(
+        self.tag_label = toga.Label("Tag: ", style=self.root.DEF_LABEL_STYLE)
+
+        self.tag_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
+
+        self.spacer2 = toga.Box(
             id="r_spacer2",
             style=Pack(flex=1,
                        direction=COLUMN,
                        background_color=WHITE),
         )
 
-        self.r_save_button = toga.Button(
+        self.save_button = toga.Button(
             "Save",
-            on_press=self.r_save_details,
+            on_press=self.save_details,
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
-        self.r_back_button2 = toga.Button(
+        self.back_button2 = toga.Button(
             "Back",
             on_press=self.back_to_receiving_main,
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
-        self.r_item_details_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                           children=[self.r_item_code_label, self.r_item_desc_label])
+        self.item_details_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                         children=[self.item_code_label, self.item_desc_label])
 
-        self.r_quantity_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                       children=[self.r_quantity_label, self.r_quantity_entry])
+        self.quantity_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                     children=[self.quantity_label, self.quantity_entry])
 
-        self.r_weight_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                     children=[self.r_weight_label, self.r_weight_entry])
+        self.weight_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                   children=[self.weight_label, self.weight_entry])
 
-        self.r_best_before_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                          children=[self.r_best_before_label, self.r_best_before_entry])
+        self.best_before_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                        children=[self.best_before_label, self.best_before_entry])
 
-        self.r_batch_code_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                         children=[self.r_batch_code_label, self.r_batch_code_entry])
+        self.batch_code_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                       children=[self.batch_code_label, self.batch_code_entry])
 
-        self.r_tag_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                  children=[self.r_tag_label, self.r_tag_entry])
+        self.tag_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                children=[self.tag_label, self.tag_entry])
 
-        self.r_spacer2_box = toga.Box(style=Pack(direction=COLUMN, flex=1, background_color=WHITE),
-                                      children=[self.r_spacer2])
+        self.spacer2_box = toga.Box(style=Pack(direction=COLUMN, flex=1, background_color=WHITE),
+                                    children=[self.spacer2])
 
-        self.r_lower_menu2_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
-                                          children=[self.r_save_button, self.r_back_button2])
+        self.lower_menu2_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, background_color=WHITE),
+                                        children=[self.save_button, self.back_button2])
 
-        self.r_details_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, direction=COLUMN, background_color=WHITE),
-                                      children=[self.r_item_details_box,
-                                                self.r_quantity_box,
-                                                self.r_weight_box,
-                                                self.r_best_before_box,
-                                                self.r_batch_code_box,
-                                                self.r_tag_box,
-                                                self.r_spacer2_box,
-                                                self.r_lower_menu2_box,
-                                                ])
+        self.details_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING, direction=COLUMN, background_color=WHITE),
+                                    children=[self.item_details_box,
+                                              self.quantity_box,
+                                              self.weight_box,
+                                              self.best_before_box,
+                                              self.batch_code_box,
+                                              self.tag_box,
+                                              self.spacer2_box,
+                                              self.lower_menu2_box,
+                                              ])
 
     def enter_receiving_main(self, widget):
         self.__clear_receiving_main_window()
-        self.root.change_window("Receiving", self.r_main_box)
+        self.root.change_window("Receiving", self.main_box)
 
     def enter_receiving_detail(self, widget):
-        sku = self.r_sku_entry.value
+        sku = self.sku_entry.value
         self.__clear_receiving_main_window()
         self.__clear_receiving_details_window()
         if sku == "111":
-            self.root.main_window.content = self.r_details_box
+            self.root.main_window.content = self.details_box
         else:
             self.no_sku_found_label.text = f"SKU {sku} not found."
-            self.r_outer_sku_box.insert(1, self.no_sku_label_box)
+            self.outer_sku_box.insert(1, self.no_sku_label_box)
 
     def __clear_receiving_main_window(self):
-        self.r_sku_entry.value = ""
-        self.r_outer_sku_box.remove(self.no_sku_label_box)
+        self.sku_entry.value = ""
+        self.outer_sku_box.remove(self.no_sku_label_box)
 
     def __clear_receiving_details_window(self):
-        self.r_quantity_entry.value = None
-        self.r_weight_entry.value = None
-        self.r_best_before_entry.value = None
-        self.r_batch_code_entry.value = None
-        self.r_tag_entry.value = None
+        self.quantity_entry.value = None
+        self.weight_entry.value = None
+        self.best_before_entry.value = None
+        self.batch_code_entry.value = None
+        self.tag_entry.value = None
 
-    def r_save_details(self, widget):
-        print(self.r_best_before_entry.value)           # TODO: Add a SQL query to save details into the database.
+    def save_details(self, widget):
+        print(self.best_before_entry.value)           # TODO: Add a SQL query to save details into the database.
         self.enter_receiving_main(widget)
 
     def back_to_receiving_main(self, widget):
         self.enter_receiving_main(widget)
 
+
 class Putaway:
     def __init__(self, root):
         self.root = root
+        self.__create_putaway_main_window()
+        self.__create_putaway_detail_window()
 
-    def create_putaway_main_window(self):
-        self.pa_tag_label = toga.Label("Tag:", style=self.root.DEF_LABEL_STYLE)
+    def __create_putaway_main_window(self):
+        self.tag_label = toga.Label("Tag:", style=self.root.DEF_LABEL_STYLE)
 
-        self.pa_tag_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
+        self.tag_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
 
         self.no_tag_found_label = toga.Label("", style=self.root.DEF_ERROR_STYLE)
 
-        self.pa_spacer = toga.Box(style=self.root.DEF_SPACER_STYLE)
+        self.spacer = toga.Box(style=self.root.DEF_SPACER_STYLE)
 
-        self.pa_enter_button = toga.Button(
+        self.enter_button = toga.Button(
             "Enter",
-            on_press=self.pa_enter_putaway_detail,
+            on_press=self.enter_putaway_detail,
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
-        self.pa_back_button = toga.Button(
+        self.back_button = toga.Button(
             "Back",
             on_press=self.root.back_to_main,
             style=self.root.DEF_LOW_MENU_STYLE,
         )
 
-        self.pa_tag_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
-                                              alignment=RIGHT,
-                                              background_color=WHITE,
-                                              flex=1),
-                                   children=[self.pa_tag_label,
-                                             self.pa_tag_entry,
-                                             ])
+        self.tag_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+                                           alignment=RIGHT,
+                                           background_color=WHITE,
+                                           flex=1),
+                                children=[self.tag_label,
+                                          self.tag_entry,
+                                          ])
 
         self.no_tag_label_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
                                                     alignment=RIGHT,
@@ -236,48 +233,48 @@ class Putaway:
                                          children=[self.no_tag_found_label,
                                                    ])
 
-        self.pa_outer_tag_box = toga.Box(style=Pack(direction=COLUMN,
-                                                    alignment=CENTER,
-                                                    background_color=WHITE,
-                                                    ),
-                                         children=[self.pa_tag_box,
-                                                   self.no_tag_label_box,
-                                                   ])
-
-        self.pa_spacer_box = toga.Box(style=Pack(direction=COLUMN,
+        self.outer_tag_box = toga.Box(style=Pack(direction=COLUMN,
+                                                 alignment=CENTER,
                                                  background_color=WHITE,
-                                                 flex=1),
-                                      children=[self.pa_spacer,
+                                                 ),
+                                      children=[self.tag_box,
+                                                self.no_tag_label_box,
                                                 ])
 
-        self.pa_lower_menu_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
-                                                     background_color=WHITE,
-                                                     ),
-                                          children=[self.pa_enter_button,
-                                                    self.pa_back_button,
-                                                    ])
+        self.spacer_box = toga.Box(style=Pack(direction=COLUMN,
+                                              background_color=WHITE,
+                                              flex=1),
+                                   children=[self.spacer,
+                                             ])
 
-        self.pa_main_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
-                                               background_color=WHITE,
-                                               direction=COLUMN),
-                                    children=[self.pa_outer_tag_box,
-                                              self.pa_spacer_box,
-                                              self.pa_lower_menu_box,
-                                              ])
+        self.lower_menu_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+                                                  background_color=WHITE,
+                                                  ),
+                                       children=[self.enter_button,
+                                                 self.back_button,
+                                                 ])
 
-    def create_putaway_detail_window(self):
+        self.main_box = toga.Box(style=Pack(padding=self.root.DEF_PADDING,
+                                            background_color=WHITE,
+                                            direction=COLUMN),
+                                 children=[self.outer_tag_box,
+                                           self.spacer_box,
+                                           self.lower_menu_box,
+                                           ])
+
+    def __create_putaway_detail_window(self):
         pass
 
     def enter_putaway_main(self, widget):
         self.__clear_putaway_main_window()
-        self.root.change_window("Putaway", self.pa_main_box)
+        self.root.change_window("Putaway", self.main_box)
 
-    def pa_enter_putaway_detail(self, widget):
+    def enter_putaway_detail(self, widget):
         pass
 
     def __clear_putaway_main_window(self):
-        self.pa_tag_entry.value = None
-        self.pa_outer_tag_box.remove(self.no_tag_label_box)
+        self.tag_entry.value = None
+        self.outer_tag_box.remove(self.no_tag_label_box)
 
 
 class WMSApp(toga.App):
@@ -330,14 +327,7 @@ class WMSApp(toga.App):
 
     def __create_windows(self):
         self.receive = Receive(self)
-        self.receive.create_receiving_main_window()
-        self.receive.create_receiving_detail_window()
-
         self.putaway = Putaway(self)
-        self.putaway.create_putaway_main_window()
-        self.putaway.create_putaway_detail_window()
-
-        self.create_picking_window()
 
     def __add_main_menu(self):
         self.receiving_button = toga.Button(
@@ -354,19 +344,16 @@ class WMSApp(toga.App):
 
         self.picking_button = toga.Button(
             "Picking",
-            on_press=self.enter_picking_main,
             style=self.DEF_MAIN_MENU_STYLE,
         )
 
         self.cuts_button = toga.Button(
             "Cuts",
-            on_press=self.enter_cuts_main,
             style=self.DEF_MAIN_MENU_STYLE,
         )
 
         self.inventory_check_button = toga.Button(
             "Inventory Check",
-            on_press=self.enter_inventory_check_main,
             style=self.DEF_MAIN_MENU_STYLE,
         )
 
@@ -375,24 +362,6 @@ class WMSApp(toga.App):
             on_press=self.__exit,
             style=self.DEF_MAIN_MENU_STYLE,
         )
-
-    # Picking
-
-    def create_picking_window(self):
-        pass
-
-    def enter_picking_main(self, widget):
-        pass
-
-    # Cuts
-
-    def enter_cuts_main(self, widget):
-        pass
-
-    # Inventory Check
-
-    def enter_inventory_check_main(self, widget):
-        pass
 
     def back_to_main(self, widget):
         self.change_window("Home", self.main_box)
