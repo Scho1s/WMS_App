@@ -291,7 +291,26 @@ class Putaway:
         self.location_from_value_label = toga.Label("", style=self.root.DEF_LABEL_STYLE)
 
         self.location_to_label = toga.Label("To:", style=self.root.DEF_LABEL_STYLE)
-        self.location_to_entry = toga.TextInput(style=self.root.DEF_ENTRY_STYLE)
+        self.location_to_entry = toga.Selection(style=self.root.DEF_ENTRY_STYLE,
+                                                on_change=self.__verify_location,
+                                                items=["",
+                                                       "DISCOUNT",
+                                                       "HOLD",
+                                                       "GOODSIN",
+                                                       "MEZZANINE",
+                                                       "SAMPLES",
+                                                       "TECHNICAL",
+                                                       "WAREHOUSE",
+                                                       "XMAS"])
+
+        self.bin_location_label = toga.Label("Bin:", style=self.root.DEF_LABEL_STYLE)
+        self.bin_location_entry = toga.Selection(style=self.root.DEF_ENTRY_STYLE,
+                                                 items=["",
+                                                        "A01",
+                                                        "A02",
+                                                        "B01",
+                                                        "B01",
+                                                        "C03"])
 
         self.spacer = toga.Box(style=Pack(flex=1, direction=COLUMN, background_color=WHITE))
 
@@ -307,8 +326,6 @@ class Putaway:
         # Boxes
         self.tag_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                 children=[self.tag_label, self.tag_value_label])
-
-        self.tag_box2 = toga.Window()
 
         self.item_details_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                          children=[self.item_code_label, self.item_desc_label])
@@ -330,6 +347,9 @@ class Putaway:
 
         self.location_to_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
                                         children=[self.location_to_label, self.location_to_entry])
+
+        self.bin_location_box = toga.Box(style=self.root.DEF_DETAILS_BOX_STYLE,
+                                         children=[self.bin_location_label, self.bin_location_entry])
 
         self.spacer_box = toga.Box(style=Pack(direction=COLUMN, flex=1, background_color=WHITE),
                                    children=[self.spacer])
@@ -369,7 +389,7 @@ class Putaway:
             self.best_before_value_label.text = "01/02/2025"
             self.batch_code_value_label.text = "AB512"
             self.location_from_value_label.text = "GOODSIN"
-            self.location_to_entry.value = "A01"                    # TODO: Change to get a default location from SQL.
+            self.location_to_entry.value = ""                       # TODO: Change to get a default location from SQL.
             self.root.main_window.content = self.details_box        # TODO: Add sublocation (visibility is based on item type value)
         else:
             pass                                                    # TODO: Add "Tag not found" error
@@ -380,6 +400,12 @@ class Putaway:
     def save_tag(self, widget):
         print(self.location_to_entry.value)                         # TODO: Add location checker.
         self.enter_putaway_main(widget)
+
+    def __verify_location(self, widget):
+        if self.location_to_entry.value == "WAREHOUSE":
+            self.details_box.insert(8, self.bin_location_box)
+        else:
+            self.details_box.remove(self.bin_location_box)
 
 
 class WMSApp(toga.App):
